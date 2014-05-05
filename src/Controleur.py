@@ -6,7 +6,8 @@ class Controleur(object):
         super(Controleur, self).__init__()
         self.isRunning = 0
         self.modele = None
-        self.vue = fichierVue.Vue(self )
+        self.vue = fichierVue.Vue( self )
+        self.vue.menu()
         self.vue.root.mainloop()
 
     def pause(self):

@@ -1,10 +1,20 @@
 class Forme(object):    
-    def __init__(self, x1, y1, x2, y2, couleur):
+    def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Forme, self).__init__()
-        listePointX = [x1,x2,x2,x1]
-        listePointY = [y1,y1,y2,y2]
+        self.tag = [tag]
+        self.listePointX = [x1,x2,x2,x1]
+        self.listePointY = [y1,y1,y2,y2]
+        self.modDirX = None
+        self.modDirY = None
+        self.angle = None
         self.couleur = couleur
-        self.vitesse = None
+
+    def changerPosition(self):
+        for point in listePointX:
+            point += self.modDirX
+        for point in listePointY:
+            point += self.modDirY
+
 
     def estEnCollision(self, nbCoin = 4, listePointX, listePointY, x, y):
         i = -1
@@ -16,13 +26,31 @@ class Forme(object):
                 etat = not etat
         return etat
 
-    def deplacer(self):
-        pass
+    def checkCollision(self, listeForme):
+        for forme in self.listeForme:
+            for i in range(len(self.listePointX)):
+                if(self.estEnCollision( len(forme.listePointX), forme.listePointX, forme.listePointY, self.listePointX[i], self.listePointY[i]):
+                    return (True,forme)
+        else:
+            return (False,None)
+
+    def rebondire(self, forme):
+        if(forme.listePointX[0])
+        self.modDirX = -self.modDirX
+        self.modDirY = -self.modDirY
+
+    def deplacer( self, listeForme ):
+        (collision, forme) = self.checkCollision(listeForme)
+        if(collision):
+            self.rebondire(forme)
+        else:
+            changerPosition()
+            
 
 class PieceDuJoueur(Forme):
-    def __init__(self, x1, y1, x2, y2, couleur):
-        super(Forme, self).__init__(x1, y1, x2, y2, couleur)
+    def __init__(self, x1, y1, x2, y2, couleur, tag):
+        super(Forme, self).__init__(x1, y1, x2, y2, couleur, tag)
 
-class Enemie(Forme):
-    def __init__(self, arg):
-        super(Forme, self).__init__(x1, y1, x2, y2, couleur)
+class Ennemi(Forme):
+    def __init__(self, x1, y1, x2, y2, couleur, tag):
+        super(Forme, self).__init__(x1, y1, x2, y2, couleur, tag)

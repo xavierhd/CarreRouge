@@ -12,13 +12,13 @@ class Vue():
         self.menu()
 
     def menu( self ):
-    	pass
+        pass
     def menuHighScore( self ):
-    	pass
+        pass
     def mettreA_Jour( self, listeForme ):
-    	pass
+        pass
     def initPartie( self, listeForme ):
-    	pass
+        pass
 
     def getPositionCarre( self ):
-    	return (self.posCarreX, self.posCarreY)
+        return (self.posCarreX, self.posCarreY)

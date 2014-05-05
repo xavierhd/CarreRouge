@@ -1,17 +1,21 @@
+import Forme as fichierForme
+
+
 class Modele(object):
     def __init__( self, grandeurEspaceDeJeuX, grandeurEspaceDeJeuY ):
         super(Modele, self).__init__()
-        self.listeObjet = []
-        self.initObjet()
-        self.toi = PieceDuJoueur()
+        self.listeForme = []
+        self.initForme()
+        self.toi = fichierForme.PieceDuJoueur()
 
     def mettreA_Jour( self, x, y ):
-        for objet in listeObjet:
-            objet.deplacer()
+        for forme in listeObjet:
+            if(forme.tag.count("cote"))
+                forme.deplacer(listeForme)
 
 
-    def initObjet( self ):
-        pass
+    def initForme( self ):
+
 
 
 
