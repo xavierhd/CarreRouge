@@ -1,20 +1,11 @@
 class Forme(object):    
     def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Forme, self).__init__()
-        self.tag = [tag]
+        self.tag = []
+        self.tag.extend(tag)
         self.listePointX = [x1,x2,x2,x1]
         self.listePointY = [y1,y1,y2,y2]
-        self.modDirX = None
-        self.modDirY = None
-        self.angle = None
         self.couleur = couleur
-
-    def changerPosition(self):
-        for point in listePointX:
-            point += self.modDirX
-        for point in listePointY:
-            point += self.modDirY
-
 
     def estEnCollision(self, nbCoin = 4, listePointX, listePointY, x, y):
         i = -1
@@ -34,17 +25,8 @@ class Forme(object):
         else:
             return (False,None)
 
-    def rebondire(self, forme):
-        if(forme.listePointX[0])
-        self.modDirX = -self.modDirX
-        self.modDirY = -self.modDirY
+    
 
-    def deplacer( self, listeForme ):
-        (collision, forme) = self.checkCollision(listeForme)
-        if(collision):
-            self.rebondire(forme)
-        else:
-            changerPosition()
             
 
 class PieceDuJoueur(Forme):
@@ -52,5 +34,33 @@ class PieceDuJoueur(Forme):
         super(Forme, self).__init__(x1, y1, x2, y2, couleur, tag)
 
 class Ennemi(Forme):
+    def __init__(self, x1, y1, x2, y2, couleur, tag):
+        super(Forme, self).__init__(x1, y1, x2, y2, couleur, tag)
+        self.modDirX = None
+        self.modDirY = None
+
+
+    def rebondire(self, forme):
+        if(forme.tag.count("droit") or forme.tag.count("gauche")):
+            self.modDirX = -self.modDirX
+
+	    if(forme.tag.count("bas") or forme.tag.count("haut")):
+            self.modDirY = -self.modDirY
+
+
+    def deplacer( self, listeForme ):
+        (collision, forme) = self.checkCollision(listeForme)
+        if(collision):
+            self.rebondire(forme)
+        else:
+            changerPosition()
+
+    def changerPosition(self):
+        for point in listePointX:
+            point += self.modDirX
+        for point in listePointY:
+            point += self.modDirY
+
+class Bord(Ennemi):
     def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Forme, self).__init__(x1, y1, x2, y2, couleur, tag)
