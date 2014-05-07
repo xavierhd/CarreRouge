@@ -20,10 +20,12 @@ class Forme(object):
         return etat
 
     def checkCollision(self, listeForme):
-        for forme in self.listeForme:
-            for i in range(len(self.listePointX)):
-                if(self.estEnCollision( len(forme.listePointX), forme.listePointX, forme.listePointY, self.listePointX[i], self.listePointY[i])):
-                    return (True,forme)
+        for forme in listeForme:
+            if(forme != self):
+                if not (forme.tag.count("mechant") and forme.tag.count("mobile")):
+                    for i in range(len(self.listePointX)):
+                        if(self.estEnCollision( len(forme.listePointX), forme.listePointX, forme.listePointY, self.listePointX[i], self.listePointY[i])):
+                            return (True,forme)
         else:
             return (False,None)
 
@@ -32,9 +34,22 @@ class Forme(object):
 class Manuel(Forme):
     def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Manuel, self).__init__(x1, y1, x2, y2, couleur, tag)
+        self.anciennePosClickX = 0
+        self.anciennePosClickY = 0
+
+    def updateCarre(self, position):
+        diffX = self.anciennePosClickX - position[0]
+        diffY = self.anciennePosClickY - position[1]
+        for point in self.listePointX:
+            point += diffX
+        for point in self.listePointY:
+            point += diffY
 
     def isNotDead( self, listeForme ):
-        (collision, forme) = self.checkCollision(listeForme)
+        collision, forme = self.checkCollision(listeForme)
+        print(collision)
+        if(forme):
+            print(forme.tag)
         if(collision): return False  
         else: return True
 
@@ -61,11 +76,10 @@ class Automatique(Forme):
         (collision, forme) = self.checkCollision(listeForme)
         if(collision):
             self.rebondire(forme)
-        else:
-            self.changerPosition()
+        self.changerPosition()
 
     def changerPosition( self ):
-        for point in listePointX:
+        for point in self.listePointX:
             point += self.modDirX
-        for point in listePointY:
+        for point in self.listePointY:
             point += self.modDirY

@@ -9,15 +9,17 @@ class Modele(object):
         self.listeForme = self.initForme()
         self.nbForme = 4
 
-    def mettreA_Jour( self, x, y ):
+    def mettreA_Jour( self, position ):
+        print("mise ajour")
         for forme in self.listeForme:
             if(forme.tag.count("mechant") and forme.tag.count("mobile")):
                 forme.deplacer(self.listeForme)
+        self.listeForme[0].updateCarre(position)
 
     def initForme( self ):
         uneListe = []
         #ajout du joueur
-        uneListe.append(fichierForme.Manuel(self.gEDJX/2-10, self.gEDJX/2-10, self.gEDJX/2+10, self.gEDJY+10, "blue", ["mobile","gentil"]))
+        uneListe.append(fichierForme.Manuel(self.gEDJX/2-10, self.gEDJX/2-10, self.gEDJX/2+10, self.gEDJY/2+10, "blue", ["mobile","gentil", "joueur"]))
         #ajout des pieces adverses
         uneListe.append(fichierForme.Automatique(self.gEDJX/4, self.gEDJY/4, self.gEDJX/4+30, self.gEDJY/4+30, "red", ["mobile","mechant"]))
         uneListe.append(fichierForme.Automatique(self.gEDJX/4*3, self.gEDJY/4, self.gEDJX/4*3+20, self.gEDJY/4+50, "red", ["mobile","mechant"]))
@@ -45,16 +47,13 @@ class Modele(object):
 
 
 
-    def setHighScore( self, name ):
+    def setHighScore( self, name, ):
         tampon = None
         try:   #tentative d'ouverture du fichier en mode append
             tampon = open("high.Score", 'a+')#a == append / + == create
             name = name.rstrip()
             aEcrire = name + '-->' + str(self.points) + '\n'
-            try:
-                tampon.write(aEcrire)
-            except Exception as e:
-                print(e)
+            tampon.write(aEcrire)
         except Exception as e:
             print(e)
         finally:
