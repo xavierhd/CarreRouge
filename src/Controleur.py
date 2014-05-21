@@ -34,14 +34,20 @@ class Controleur(object):
             self.compteurDeLoop += 1
             print("loop --> "+ str(self.compteurDeLoop))
             if self.isRunning:
-                print("selfisrunning")
-                self.modele.mettreA_Jour( self.vue.getPositionCarre() )
+                self.modele.mettreA_Jour()
                 self.vue.mettreA_Jour( self.modele.listeForme )
-            self.vue.root.after(30,self.gameLoop)
+            self.vue.root.after(40,self.gameLoop)
         else:
+            print("vous etes mort!!! tantantan!!!")
             self.modele = None
             self.vue.premierClick = 1 
+            self.pause()
             self.vue.menu()
+
+    def aBouger(self, positionCarre):
+        if(self.modele):
+            self.modele.updateCarreJoueur(positionCarre)
+
 
     def afficherHighScore(self):
         self.vue.menuHighScore(self.modele.getHighScore())

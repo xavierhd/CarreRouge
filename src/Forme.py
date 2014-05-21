@@ -3,11 +3,21 @@ import random
 class Forme(object):    
     def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Forme, self).__init__()
-        self.tag = ["forme"]
-        self.tag.extend(tag)
+        self.tag = tag
         self.listePointX = [x1,x2,x2,x1]
         self.listePointY = [y1,y1,y2,y2]
         self.couleur = couleur
+
+    def __eq__(self, other): 
+        for i in range(len(self.listePointX)):
+            if(self.listePointX[i] == other.listePointX[i] and self.listePointY[i] == other.listePointY[i]):
+                continue
+            else:
+                break
+        else:
+            return True
+        return False
+
 
     def estEnCollision(self, nbCoin, listePointX, listePointY, x, y):
         i = -1
@@ -19,38 +29,62 @@ class Forme(object):
                 etat = not etat
         return etat
 
+    '''def estEnCollision2( self, x, y ):
+        print("ICI EN COLLISION ------------------------------")
+        if(x > self.listePointX[0]):
+            return True
+            
+        elif(x < self.listePointX[1]):
+            return True
+        
+        elif(y > self.listePointY[0]):
+            return True
+        
+        elif(y < self.listePointY[2]):
+            return True
+        
+        return False'''
+
     def checkCollision(self, listeForme):
         for forme in listeForme:
-            if(forme != self):
-                if not (forme.tag.count("mechant") and forme.tag.count("mobile")):
+            if(not forme == self):
+                if (self.couleur == "blue" and not forme.tag.count("mobile") or self.couleur == "red" and forme.tag.count("mechant")):
                     for i in range(len(self.listePointX)):
                         if(self.estEnCollision( len(forme.listePointX), forme.listePointX, forme.listePointY, self.listePointX[i], self.listePointY[i])):
-                            return (True,forme)
+                            return forme
         else:
-            return (False,None)
+            return None
+"""self.estEnCollision( len(forme.listePointX), forme.listePointX, forme.listePointY, self.listePointX[i], self.listePointY[i])   self.estEnCollision2(self.listePointX[i],self.listePointY[i])"""
 
                   
 
 class Manuel(Forme):
     def __init__(self, x1, y1, x2, y2, couleur, tag):
         super(Manuel, self).__init__(x1, y1, x2, y2, couleur, tag)
-        self.anciennePosClickX = 0
-        self.anciennePosClickY = 0
+        self.anciennePosClickX = 300
+        self.anciennePosClickY = 300
+
 
     def updateCarre(self, position):
         diffX = self.anciennePosClickX - position[0]
         diffY = self.anciennePosClickY - position[1]
+        for i in range(4):
+            self.listePointX[i]-= diffX
+            self.listePointY[i]-= diffY
+        '''
         for point in self.listePointX:
+            print(point)
             point += diffX
+            print(point)
         for point in self.listePointY:
             point += diffY
+        '''
+        self.anciennePosClickX = position[0]
+        self.anciennePosClickY = position[1]
 
     def isNotDead( self, listeForme ):
-        collision, forme = self.checkCollision(listeForme)
-        print(collision)
-        if(forme):
-            print(forme.tag)
-        if(collision): return False  
+        forme = self.checkCollision(listeForme)
+        if(forme): return False  
         else: return True
 
 class Automatique(Forme):
@@ -61,25 +95,31 @@ class Automatique(Forme):
         self.initModDir()
 
     def initModDir( self ):
-        self.modDirX = random.randrange(9)-4
-        self.modDirY = random.randrange(9)-4
+        self.modDirX = random.randrange(15)-7
+        self.modDirY = random.randrange(15)-7
 
     def rebondire( self, forme ):
-        if(forme.tag.count("droit") or forme.tag.count("gauche")):
+        if(forme.tag.count("droit")):
             self.modDirX = -self.modDirX
 
-        if(forme.tag.count("bas") or forme.tag.count("haut")):
+        if(forme.tag.count("gauche")):
+            self.modDirX = -self.modDirX
+
+        if(forme.tag.count("bas")):
+            self.modDirY = -self.modDirY
+
+        if(forme.tag.count("haut")):
             self.modDirY = -self.modDirY
 
 
     def deplacer( self, listeForme ):
-        (collision, forme) = self.checkCollision(listeForme)
-        if(collision):
+        forme = self.checkCollision(listeForme)
+        if(forme):
+            print("COLLISION!!!!")
             self.rebondire(forme)
         self.changerPosition()
 
-    def changerPosition( self ):
-        for point in self.listePointX:
-            point += self.modDirX
-        for point in self.listePointY:
-            point += self.modDirY
+    def changerPosition( self):
+        for i in range(4):
+            self.listePointX[i]-= self.modDirX
+            self.listePointY[i]-= self.modDirY
